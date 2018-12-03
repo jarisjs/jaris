@@ -18,7 +18,7 @@
     "url": "git+https://github.com/jarisjs/jaris.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "tsc": "tsc"
   },
   "bugs": {
     "url": "https://github.com/jarisjs/jaris/issues"
