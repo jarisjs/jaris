@@ -11,23 +11,23 @@ const validate = async (data: any, rules: any) => {
   let returnData = {};
 
   for (let i = 0; i < fieldNames.length; i++) {
-    const validators = rules[fieldNames[i]];
-    const value = data[fieldNames[i]];
+    const fieldName = fieldNames[i];
+    const validators = rules[fieldName];
+    const value = data[fieldName];
 
     for (let x = 0; x < validators.length; x++) {
       const response = await validators[x](value, data);
 
       if (response.error) {
         if (typeof response.error === 'object') {
-          errors[fieldNames[i]] = response.error;
+          errors[fieldName] = response.error;
         } else {
-          errors[fieldNames[i]] = errors[fieldNames[i]] || [];
-          errors[fieldNames[i]].push(response.error);
+          errors[fieldName] = [...(errors[fieldName] || []), response.error];
         }
       }
 
       if (response.ok) {
-        returnData[fieldNames[i]] = data[fieldNames[i]];
+        returnData[fieldName] = data[fieldName];
       }
 
       if (response.next === false) {

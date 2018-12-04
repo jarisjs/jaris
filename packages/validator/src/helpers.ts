@@ -13,6 +13,19 @@ export async function allP(
   return true;
 }
 
+export async function anyP(
+  pPred: (elem: any) => Promise<boolean>,
+  list: any[],
+) {
+  for (let i = 0; i < list.length; i++) {
+    const pred = await pPred(list[i]);
+    if (pred) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function get(path: string, object: any, defaultValue: any = '') {
   const split = path.split('.');
 
@@ -45,4 +58,8 @@ export async function validatorError(
     next,
     error,
   };
+}
+
+export function range(size: number, startAt: number = 0): number[] {
+  return [...Array(size).keys()].map(i => i + startAt);
 }

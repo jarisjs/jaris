@@ -1,5 +1,4 @@
-import { allP } from '../helpers';
-import { validatorSuccess, validatorError } from '../helpers';
+import { allP, validatorSuccess, validatorError } from '../helpers';
 import { BoolExpCallback } from '../types';
 
 export const all = (evaluator: BoolExpCallback) => async (value: any[]) =>

@@ -8,7 +8,8 @@ export const length = (
   if (typeof value === 'string') {
     value = value.trim();
   }
-  return value.length <= max && value.length >= min
+
+  return value && value.length && value.length <= max && value.length >= min
     ? validatorSuccess()
     : validatorError(
         errorMessage || `needs to have a length between ${min} and ${max}`,
