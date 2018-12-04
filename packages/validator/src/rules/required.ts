@@ -1,11 +1,10 @@
-import { validatorError, ValidatorReturn, validatorSuccess } from '../index';
+import { validatorError, validatorSuccess } from '../helpers';
+import { ValidatorReturn } from '../types';
 
-const required = () => {
+export const required = () => {
   return async (value: any): ValidatorReturn => {
     return value === null || value === undefined
       ? validatorError('is required', false)
       : validatorSuccess();
   };
 };
-
-export default required;

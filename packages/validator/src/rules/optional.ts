@@ -1,6 +1,7 @@
-import { ValidatorReturn, validatorSuccess } from '../index';
+import { validatorSuccess } from '../helpers';
+import { ValidatorReturn } from '../types';
 
-const optional = () => {
+export const optional = () => {
   return async (value: string): ValidatorReturn => {
     if (typeof value === 'undefined') {
       // if the value is not present, do not continue with next validators
@@ -10,5 +11,3 @@ const optional = () => {
     return validatorSuccess();
   };
 };
-
-export default optional;

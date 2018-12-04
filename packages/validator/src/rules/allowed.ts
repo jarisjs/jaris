@@ -1,4 +1,5 @@
-import { ValidatorReturn, validatorSuccess, validatorError } from '../index';
+import { validatorSuccess, validatorError } from '../helpers';
+import { ValidatorReturn } from '../types';
 
 export function allowed(allowedValues: any[]) {
   return (value: any): ValidatorReturn =>

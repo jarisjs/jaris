@@ -1,6 +1,5 @@
-import { validatorSuccess, validatorError } from '../index';
-
-export type BoolExpCallback = (property: any) => boolean | Promise<boolean>;
+import { validatorSuccess, validatorError } from '../helpers';
+import { BoolExpCallback } from '../types';
 
 const lambda = (evaluator: BoolExpCallback, message = 'invalid value') => {
   return async (property: any) => {

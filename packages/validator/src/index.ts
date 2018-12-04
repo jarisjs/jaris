@@ -1,32 +1,6 @@
-export interface ValidatorReturnObject {
-  ok: boolean;
-  next: boolean;
-  error?: string | { [key: string]: string[] | string };
-}
-
-export type ValidatorReturn = Promise<ValidatorReturnObject>;
-
-export async function validatorSuccess(next: boolean = true): ValidatorReturn {
-  return {
-    ok: true,
-    next,
-  };
-}
-
-export async function validatorError(
-  error: string | { [key: string]: string[] | string },
-  next: boolean = true,
-): ValidatorReturn {
-  return {
-    ok: false,
-    next,
-    error,
-  };
-}
-
-export function wrap(value: any) {
-  return () => value;
-}
+export * from './rules';
+export * from './types';
+export { validatorError, validatorSuccess } from './helpers';
 
 //TODO rewrite this, eliminate for loops
 const validate = async (data: any, rules: any) => {

@@ -1,4 +1,4 @@
-import { validatorSuccess, validatorError, wrap } from '../index';
+import { validatorSuccess, validatorError } from '../helpers';
 
 export function type(valueType: string) {
   return (value: any) => {
@@ -12,8 +12,3 @@ export function type(valueType: string) {
       : validatorError(`expected ${valueType} but got ${typeof value}`, false);
   };
 }
-
-export const number = wrap(type('number'));
-export const boolean = wrap(type('boolean'));
-export const string = wrap(type('string'));
-export const array = wrap(type('Array'));
