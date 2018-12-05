@@ -18,4 +18,3 @@ export * from './required';
 export * from './requiredWith';
 export * from './string';
 export * from './type';
-export * from './uuid4';
