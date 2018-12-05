@@ -1,7 +1,7 @@
-import { object } from '../src/rules/object';
-import { required } from '../src/rules/required';
-import { optional } from '../src/rules/optional';
-import { number } from '../src/rules/number';
+import object from '../src/rules/object';
+import required from '../src/rules/required';
+import optional from '../src/rules/optional';
+import number from '../src/rules/number';
 
 describe('object validator', () => {
   it('should validate an empty object', async done => {

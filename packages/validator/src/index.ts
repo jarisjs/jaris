@@ -36,17 +36,15 @@ const validate = async (data: any, rules: any) => {
     }
   }
 
-  if (Object.keys(errors).length > 0) {
-    return {
-      data: null,
-      errors,
-    };
-  }
-
-  return {
-    data,
-    errors: null,
-  };
+  return Object.keys(errors).length > 0
+    ? {
+        data: null,
+        errors,
+      }
+    : {
+        data,
+        errors: null,
+      };
 };
 
 export default validate;

@@ -1,4 +1,4 @@
-import { min } from '../src/rules/min';
+import min from '../src/rules/min';
 
 describe('min', () => {
   it('should return success when the value is more than the min length required', async done => {

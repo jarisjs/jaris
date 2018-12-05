@@ -1,4 +1,4 @@
-import { boolean } from '../src/rules/boolean';
+import boolean from '../src/rules/boolean';
 
 describe('boolean', () => {
   it('should return success when the value is a boolean', async done => {

@@ -1,13 +1,10 @@
 import { validatorSuccess, validatorError } from '../helpers';
 import { BoolExpCallback } from '../types';
 
-export const lambda = (
+const lambda = (
   evaluator: BoolExpCallback,
   message = 'invalid value',
-) => {
-  return async (property: any) => {
-    const result = await evaluator(property);
+) => async (property: any) =>
+  (await evaluator(property)) ? validatorSuccess() : validatorError(message);
 
-    return result ? validatorSuccess() : validatorError(message);
-  };
-};
+export default lambda;

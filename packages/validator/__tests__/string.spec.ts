@@ -1,4 +1,4 @@
-import { string } from '../src/rules/string';
+import string from '../src/rules/string';
 
 describe('string', () => {
   it('should return success when the value is a string', async done => {

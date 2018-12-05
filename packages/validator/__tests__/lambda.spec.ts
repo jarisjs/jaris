@@ -1,4 +1,4 @@
-import { lambda } from '../src/rules/lambda';
+import lambda from '../src/rules/lambda';
 import { allP, anyP, range } from '../src/helpers';
 
 describe('lambda', () => {

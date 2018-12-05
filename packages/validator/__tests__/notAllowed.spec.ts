@@ -1,4 +1,4 @@
-import { notAllowed } from '../src/rules/notAllowed';
+import notAllowed from '../src/rules/notAllowed';
 
 describe('notAllowed', () => {
   it('should return success when the value is not in the array', async done => {

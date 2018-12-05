@@ -1,8 +1,8 @@
 import { validatorSuccess, validatorError } from '../helpers';
 
-export function regex(pattern: string) {
-  return (value: string) =>
-    RegExp(pattern).test(value)
-      ? validatorSuccess()
-      : validatorError('invalid value');
-}
+const regex = (pattern: string) => (value: string) =>
+  RegExp(pattern).test(value)
+    ? validatorSuccess()
+    : validatorError('invalid value');
+
+export default regex;

@@ -1,4 +1,4 @@
-import { max } from '../src/rules/max';
+import max from '../src/rules/max';
 
 describe('max', () => {
   it('should return success when the value is less than the max length required', async done => {

@@ -1,5 +1,5 @@
 import { allP, anyP } from '../src/helpers';
-import { hexColor } from '../src/rules/hexColor';
+import hexColor from '../src/rules/hexColor';
 
 describe('hexColor', () => {
   it('should successfully validate colours', async done => {

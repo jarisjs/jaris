@@ -1,4 +1,6 @@
 import { wrap } from '../helpers';
-import { type } from './type';
+import type from './type';
 
-export const boolean = wrap(type('boolean'));
+const boolean = wrap(type('boolean'));
+
+export default boolean;

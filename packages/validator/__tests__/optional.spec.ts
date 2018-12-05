@@ -1,5 +1,5 @@
 import validate from '../src/index';
-import { optional } from '../src/rules/optional';
+import optional from '../src/rules/optional';
 
 describe('optional', () => {
   it('should return success when the value is not present', async done => {

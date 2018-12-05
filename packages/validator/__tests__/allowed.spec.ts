@@ -1,4 +1,4 @@
-import { allowed } from '../src/rules/allowed';
+import allowed from '../src/rules/allowed';
 
 describe('allowed', () => {
   it('should return success when the value is in the array', async done => {

@@ -1,4 +1,4 @@
-import { type } from '../src/rules/type';
+import type from '../src/rules/type';
 
 describe('type validator', () => {
   it('should return true for primitive types', async done => {

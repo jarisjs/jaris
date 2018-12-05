@@ -1,4 +1,4 @@
-import { required } from '../src/rules/required';
+import required from '../src/rules/required';
 
 describe('required', () => {
   it('should return success when the value is present', async done => {

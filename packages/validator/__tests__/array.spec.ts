@@ -1,4 +1,4 @@
-import { array } from '../src/rules/array';
+import array from '../src/rules/array';
 
 describe('array', () => {
   it('should return success when the value is an array', async done => {

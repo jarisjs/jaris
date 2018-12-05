@@ -1,4 +1,4 @@
-import { length } from '../src/rules/length';
+import length from '../src/rules/length';
 
 describe('length', () => {
   it('should return success when the value is the minimum length required', async done => {

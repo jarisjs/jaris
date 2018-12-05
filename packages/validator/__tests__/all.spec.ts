@@ -1,4 +1,4 @@
-import { all } from '../src/rules/all';
+import all from '../src/rules/all';
 
 describe('all', () => {
   it('should return success when all evaluations return true', async done => {

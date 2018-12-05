@@ -1,4 +1,4 @@
-import { exists } from '../src/rules/exists';
+import exists from '../src/rules/exists';
 
 describe('exists', () => {
   it('should return success when the value is in the array', async done => {

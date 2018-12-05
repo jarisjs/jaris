@@ -1,5 +1,5 @@
 import validate from '../src/index';
-import { requiredWith } from '../src/rules/requiredWith';
+import requiredWith from '../src/rules/requiredWith';
 
 describe('requiredWith', () => {
   it('should return success when both of the values are present', async done => {

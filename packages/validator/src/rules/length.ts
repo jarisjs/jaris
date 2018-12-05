@@ -1,6 +1,6 @@
 import { validatorSuccess, validatorError } from '../helpers';
 
-export const length = (
+const length = (
   min: number,
   max: number,
   errorMessage: string | undefined = undefined,

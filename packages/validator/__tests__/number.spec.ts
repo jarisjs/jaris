@@ -1,4 +1,4 @@
-import { number } from '../src/rules/number';
+import number from '../src/rules/number';
 
 describe('number', () => {
   it('should return success when the value is a number', async done => {

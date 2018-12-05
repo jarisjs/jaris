@@ -1,5 +1,5 @@
 import { allP, range } from '../src/helpers';
-import { regex } from '../src/rules/regex';
+import regex from '../src/rules/regex';
 
 describe('regex', () => {
   it('successfully validates regex expressions', async done => {

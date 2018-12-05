@@ -1,9 +1,9 @@
 import { validatorError, validatorSuccess } from '../helpers';
 import { ValidatorReturn } from '../types';
 
-export function notExists(existingValues: any[]) {
-  return (value: any): ValidatorReturn =>
-    existingValues.indexOf(value) !== -1
-      ? validatorError(`already exists`)
-      : validatorSuccess();
-}
+const notExists = (existingValues: any[]) => (value: any): ValidatorReturn =>
+  existingValues.indexOf(value) !== -1
+    ? validatorError(`already exists`)
+    : validatorSuccess();
+
+export default notExists;

@@ -1,4 +1,6 @@
 import { wrap } from '../helpers';
-import { type } from './type';
+import type from './type';
 
-export const array = wrap(type('Array'));
+const array = wrap(type('Array'));
+
+export default array;

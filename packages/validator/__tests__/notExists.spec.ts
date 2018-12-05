@@ -1,4 +1,4 @@
-import { notExists } from '../src/rules/notExists';
+import notExists from '../src/rules/notExists';
 
 describe('notExists', () => {
   it('should return success when the value is not in the array', async done => {
