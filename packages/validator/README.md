@@ -7,7 +7,6 @@ Easily validate any data using an easily testable and extendable approach. AKA p
 ```javascript
 import validate from '@jaris/validator';
 import { optional, required, string, object } from '@jaris/validator/rules';
-import knex from 'knex';
 
 const userController = {
   async store(ctx) {
