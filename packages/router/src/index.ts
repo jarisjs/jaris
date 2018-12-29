@@ -4,6 +4,8 @@ import { Conn } from '@jaris/core';
 import { text } from './responses';
 import { Route, MiddlewareFunction } from './types';
 
+export * from './builder';
+export * from './responses';
 export * from './types';
 
 export async function runMiddleware(conn: Conn, route: Route) {

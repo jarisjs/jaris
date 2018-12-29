@@ -1,5 +1,4 @@
 import {
-  RoutesList,
   HandlerType,
   Route,
   GroupOptions,
@@ -9,68 +8,62 @@ import {
 } from './types';
 
 export function get(path: string, handler: HandlerType) {
-  return (routes: RoutesList) => [
-    ...routes,
-    buildRouteObject('get', path, handler),
-  ];
+  return buildRouteObject('get', path, handler);
 }
 
 export function post(path: string, handler: HandlerType) {
-  return (routes: RoutesList) => [
-    ...routes,
-    buildRouteObject('post', path, handler),
-  ];
+  return buildRouteObject('post', path, handler);
 }
 
 export function put(path: string, handler: HandlerType) {
-  return (routes: RoutesList) => [
-    ...routes,
-    buildRouteObject('put', path, handler),
-  ];
+  return buildRouteObject('put', path, handler);
 }
 
 export function patch(path: string, handler: HandlerType) {
-  return (routes: RoutesList) => [
-    ...routes,
-    buildRouteObject('patch', path, handler),
-  ];
+  return buildRouteObject('patch', path, handler);
 }
 
 export function destroy(path: string, handler: HandlerType) {
-  return (routes: RoutesList) => [
-    ...routes,
-    buildRouteObject('delete', path, handler),
-  ];
+  return buildRouteObject('delete', path, handler);
 }
 
 export function group(options: GroupOptions, callback: GroupCallback) {
-  return (routes: RoutesList): Route[] => {
-    const existingRoutes = [...routes];
+  const updatedRoutes = callback().map(
+    (routeObj): Route | Route[] => {
+      // handle nested group
 
-    const updatedRoutes = callback().map(appendRoute => {
-      let routesToUpdate = appendRoute(initializeRoutes());
+      if (Array.isArray(routeObj)) {
+        return group(options, () => routeObj);
+      }
+
+      let updatedRoute = { ...routeObj };
 
       if (options.prefix) {
-        routesToUpdate = routesToUpdate.map(route =>
-          applyPrefix(route, options!.prefix),
-        );
+        updatedRoute = applyPrefix(routeObj, options!.prefix);
       }
 
       if (options.middleware) {
-        routesToUpdate = routesToUpdate.map(route => {
-          return { ...route, middleware: options.middleware! };
-        });
+        updatedRoute = {
+          ...updatedRoute,
+          middleware: [...updatedRoute.middleware, ...options.middleware],
+        };
       }
 
-      return routesToUpdate;
-    });
+      return updatedRoute;
+    },
+  );
 
-    return [...existingRoutes, ...flatten(updatedRoutes)];
-  };
+  return [...flatten(updatedRoutes)] as Route[];
 }
 
 function flatten(arr: any[]) {
-  return arr.reduce((carry, nextArr) => [...carry, ...nextArr], []);
+  return arr.reduce(
+    (carry, nextArr) => [
+      ...carry,
+      ...(Array.isArray(nextArr) ? nextArr : [nextArr]),
+    ],
+    [],
+  );
 }
 
 function trim(str: string, char: string = '\\s') {

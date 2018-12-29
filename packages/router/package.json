@@ -17,6 +17,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@jaris/core": "^0.0.1"
+    "@jaris/core": "^0.0.1",
+    "url-matcher": "^0.2.2"
   }
 }

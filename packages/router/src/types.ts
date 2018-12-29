@@ -28,4 +28,4 @@ export interface GroupOptions {
 
 export type ArrayItem = (routes: RoutesList) => RoutesList;
 
-export type GroupCallback = () => ArrayItem[];
+export type GroupCallback = () => Route[];
