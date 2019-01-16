@@ -1,6 +1,6 @@
 {
   "name": "@jaris/core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "> TODO: description",
   "author": "Ozzie Neher <oz.neher@gmail.com>",
   "homepage": "",
@@ -16,6 +16,5 @@
   "scripts": {
     "tsc": "tsc"
   },
-  "types": "lib/index.d.ts",
-  "gitHead": "09a4395923c55d4d5bd55d35cc2aff60872c734f"
+  "types": "lib/index.d.ts"
 }
