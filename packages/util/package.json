@@ -1,6 +1,6 @@
 {
   "name": "@jaris/util",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "> TODO: description",
   "author": "Ozzie Neher <oz.neher@gmail.com>",
   "homepage": "",
@@ -15,5 +15,6 @@
   ],
   "scripts": {
     "tsc": "tsc"
-  }
+  },
+  "gitHead": "09a4395923c55d4d5bd55d35cc2aff60872c734f"
 }

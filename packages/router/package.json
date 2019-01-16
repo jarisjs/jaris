@@ -1,6 +1,6 @@
 {
   "name": "@jaris/router",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "> TODO: description",
   "author": "Ozzie Neher <oz.neher@gmail.com>",
   "homepage": "",
@@ -20,5 +20,6 @@
     "@jaris/core": "^0.0.1",
     "@jaris/util": "^0.0.1",
     "url-matcher": "^0.2.2"
-  }
+  },
+  "gitHead": "09a4395923c55d4d5bd55d35cc2aff60872c734f"
 }
