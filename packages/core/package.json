@@ -16,5 +16,9 @@
   "scripts": {
     "tsc": "tsc"
   },
-  "types": "lib/index.d.ts"
+  "types": "lib/index.d.ts",
+  "gitHead": "6048a0b82cb5ad81e57e9e498532ac4748f390ab",
+  "publishConfig": {
+    "access": "public"
+  }
 }

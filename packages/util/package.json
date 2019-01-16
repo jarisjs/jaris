@@ -16,5 +16,8 @@
   "scripts": {
     "tsc": "tsc"
   },
-  "gitHead": "09a4395923c55d4d5bd55d35cc2aff60872c734f"
+  "gitHead": "09a4395923c55d4d5bd55d35cc2aff60872c734f",
+  "publishConfig": {
+    "access": "public"
+  }
 }
