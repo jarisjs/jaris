@@ -20,7 +20,10 @@ export function createConn(
 
 type JarisMiddleware = (conn: Conn) => Conn | Promise<Conn>;
 
-export default function server(composedApp: JarisMiddleware[]) {
+export default function server(
+  composedApp: JarisMiddleware[],
+  port: number = 3001,
+) {
   const server = http.createServer(
     async (req: http.IncomingMessage, res: http.ServerResponse) => {
       const { status, body, headers } = await composedApp.reduce(
@@ -40,5 +43,5 @@ export default function server(composedApp: JarisMiddleware[]) {
       return res.end(Buffer.from(responseBody));
     },
   );
-  return server.listen(3001);
+  return server.listen(port);
 }
