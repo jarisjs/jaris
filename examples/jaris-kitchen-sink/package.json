@@ -1,0 +1,18 @@
+{
+  "name": "jaris-kitchen-sink",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "@jaris/core": "^0.0.1",
+    "@jaris/router": "^0.0.1",
+    "@jaris/validator": "^0.0.1"
+  }
+}

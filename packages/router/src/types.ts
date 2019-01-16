@@ -19,7 +19,7 @@ export type RoutesList = Route[];
 
 export type HTTPVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
-export type MiddlewareFunction = (conn: Conn) => any;
+export type MiddlewareFunction = (conn: Conn) => Conn | Promise<Conn>;
 
 export interface GroupOptions {
   prefix?: string;
@@ -28,4 +28,4 @@ export interface GroupOptions {
 
 export type ArrayItem = (routes: RoutesList) => RoutesList;
 
-export type GroupCallback = () => ArrayItem[];
+export type GroupCallback = () => Route[];

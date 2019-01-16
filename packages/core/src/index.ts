@@ -12,16 +12,19 @@ export function createConn(
     params: {},
     body: {},
     headers: {},
+    halt: false,
     req,
     res,
   };
 }
 
-export default function server(composedApp: any) {
+type JarisMiddleware = (conn: Conn) => Conn | Promise<Conn>;
+
+export default function server(composedApp: JarisMiddleware[]) {
   const server = http.createServer(
     async (req: http.IncomingMessage, res: http.ServerResponse) => {
       const { status, body, headers } = await composedApp.reduce(
-        async (conn: Conn, fn: any) => await fn(conn),
+        async (conn: Conn, fn) => await fn(await conn),
         createConn(req, res) as any,
       );
 

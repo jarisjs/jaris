@@ -1,5 +1,5 @@
 {
-  "name": "@jaris/router",
+  "name": "@jaris/util",
   "version": "0.0.1",
   "description": "> TODO: description",
   "author": "Ozzie Neher <oz.neher@gmail.com>",
@@ -16,9 +16,5 @@
   "scripts": {
     "tsc": "tsc"
   },
-  "dependencies": {
-    "@jaris/core": "^0.0.1",
-    "@jaris/util": "^0.0.1",
-    "url-matcher": "^0.2.2"
-  }
+  "dependencies": {}
 }
