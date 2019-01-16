@@ -21,7 +21,8 @@ const userController = {
     return json(conn, { user: {} });
   },
   update: async (conn: Conn, { userUid }: UserParams) => {
-    const { data, errors } = await validate(conn.body, {
+    const body = {}; // TODO: Swap when body parsing is built in ;)
+    const { data, errors } = await validate(body, {
       firstName: [required(), string()],
       lastName: [required(), string()],
       email: [required(), string()],

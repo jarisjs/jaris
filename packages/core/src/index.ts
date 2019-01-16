@@ -12,6 +12,7 @@ export function createConn(
     params: {},
     body: {},
     headers: {},
+    halt: false,
     req,
     res,
   };

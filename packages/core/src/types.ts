@@ -18,4 +18,5 @@ export interface Conn<T = any> {
   headers: {
     [key: string]: string;
   };
+  halt: boolean;
 }

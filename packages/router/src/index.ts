@@ -1,8 +1,9 @@
 // @ts-ignore
 import { matchPattern, getParams } from 'url-matcher';
 import { Conn } from '@jaris/core';
+import { reduceP } from '@jaris/util';
 import { text } from './responses';
-import { Route, MiddlewareFunction } from './types';
+import { Route } from './types';
 
 export * from './builder';
 export * from './responses';
@@ -12,18 +13,23 @@ export async function runMiddleware(conn: Conn, route: Route) {
   let finalReturn: any = null;
 
   if (route.middleware) {
-    finalReturn = await route.middleware.reduce(
-      async (carry, middlewareFunc: MiddlewareFunction) =>
-        (await carry) || (await middlewareFunc(conn)),
-      null as any,
+    finalReturn = await reduceP(
+      async (carry, middlewareFunc) => {
+        if (carry.halt) {
+          return carry;
+        }
+        return await middlewareFunc(conn);
+      },
+      conn,
+      route.middleware,
     );
   }
 
   /**
-   * No middleware or they did not return any errors
+   * No middleware or they did not halt early
    * so lets run the controller handler
    */
-  if (!finalReturn) {
+  if (!finalReturn.halt) {
     return await route.callback!(conn, getParams(route.path, conn.req.url));
   }
 
