@@ -1,12 +1,10 @@
 // @ts-ignore
 import { matchPattern, getParams } from 'url-matcher';
-import { Conn } from '@jaris/core';
-import { reduceP } from '@jaris/util';
-import { text } from './responses';
+import { Conn, text, status } from '@jaris/core';
+import { reduceP, pipe } from '@jaris/util';
 import { Route } from './types';
 
 export * from './builder';
-export * from './responses';
 export * from './types';
 
 export async function runMiddleware(conn: Conn, route: Route) {
@@ -46,12 +44,13 @@ const router = (routes: Route[]) => {
     });
 
     if (!route || !route.callback) {
-      return text(conn, 'Not found', 404);
+      return pipe(
+        text('Not found'),
+        status(404),
+      )(conn);
     }
 
-    const resultingConn = await runMiddleware(conn, route);
-
-    return resultingConn;
+    return await runMiddleware(conn, route);
   };
 };
 

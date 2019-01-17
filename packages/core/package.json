@@ -20,5 +20,8 @@
   "gitHead": "6048a0b82cb5ad81e57e9e498532ac4748f390ab",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@jaris/util": "^0.0.5"
   }
 }
