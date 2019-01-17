@@ -20,7 +20,7 @@ server([conn => text('Hello, world!', conn)]);
 
 Documentation is still a WIP but you can read more by clicking into the packages and reading their `README` files.
 
-- [@jaris/core]()
-- [@jaris/router]()
-- [@jaris/validator]()
-- [@jaris/util]()
+- [@jaris/core](https://github.com/jarisjs/jaris/tree/master/packages/core)
+- [@jaris/router](https://github.com/jarisjs/jaris/tree/master/packages/router)
+- [@jaris/validator](https://github.com/jarisjs/jaris/tree/master/packages/validator)
+- [@jaris/util](https://github.com/jarisjs/jaris/tree/master/packages/util)
