@@ -1,10 +1,10 @@
-import { Conn } from '@jaris/core';
-import { get, put, group, text } from '@jaris/router';
+import { Conn, text } from '@jaris/core';
+import { get, group, post } from '@jaris/router';
 import userController from '../controllers/user.controller';
 
 const routes = [
   get('/', (conn: Conn) => {
-    return text(conn, 'Home page :)');
+    return text('Home page :)', conn);
   }),
 
   ...group({ prefix: '/users' }, () => [
@@ -14,7 +14,7 @@ const routes = [
 
     // Another way to write the above, if you have multiple routes at /users/:userUid/x
     ...group({ prefix: '/:userUid' }, () => [
-      put('/', userController.update), // /users/1234
+      post('/', userController.store), // /users/1234
     ]),
   ]),
 ];

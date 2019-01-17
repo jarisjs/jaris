@@ -1,5 +1,5 @@
-import { Conn } from '@jaris/core';
-import { json } from '@jaris/router';
+import { Conn, json, status } from '@jaris/core';
+import { pipe } from '@jaris/util';
 import validate, { string, required, optional } from '@jaris/validator';
 
 interface UserParams {
@@ -14,13 +14,13 @@ const createAndStoreUser = (userUid: string, body: any) => {
 const userController = {
   index: (conn: Conn) => {
     // ... fetch users
-    return json(conn, { users: [] });
+    return json({ users: [] }, conn);
   },
   show: (conn: Conn, { userUid }: UserParams) => {
     // fetch single user based on userUid
-    return json(conn, { user: {} });
+    return json({ user: {} }, conn);
   },
-  update: async (conn: Conn, { userUid }: UserParams) => {
+  store: async (conn: Conn, { userUid }: UserParams) => {
     const body = {}; // TODO: Swap when body parsing is built in ;)
     const { data, errors } = await validate(body, {
       firstName: [required(), string()],
@@ -30,10 +30,13 @@ const userController = {
     });
 
     if (errors) {
-      return json(conn, { errors }, 422);
+      return pipe(
+        json({ errors }),
+        status(422),
+      )(conn);
     }
 
-    return json(conn, { user: createAndStoreUser(userUid, data) });
+    return json({ user: createAndStoreUser(userUid, data) }, conn);
   },
 };
 
