@@ -87,7 +87,7 @@ import { pipe } from '@jaris/util';
 const currentTimestamp = () => Math.round((new Date()).getTime() / 1000);
 
 server([
-  conn => header('X-Start-Time', `${currentTimestamp()}`),
+  conn => header('X-Start-Time', `${currentTimestamp()}`, conn),
   conn => {
     // ...perform some relatively long task
     return conn;
@@ -99,7 +99,7 @@ server([
     return pipe(
       header('X-End-Time', `${endTime}`)
       header('X-Total-Time', `${endTime - startTime} seconds`)
-    )
+    )(conn);
   }
 ]);
 ```
