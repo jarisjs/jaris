@@ -2,7 +2,7 @@
 
 **jaris is still in very early alpha, production usage is not recommended**
 
-Jaris. A (soon-to-be) 0 dependency, functional (phoenix) inspired, node / typescript web framework.
+Jaris. A 0 dependency, functional (phoenix) inspired, node / typescript web framework.
 
 # Installation
 

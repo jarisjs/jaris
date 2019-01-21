@@ -2,7 +2,11 @@
 
 **jaris is still in very early alpha, production usage is not recommended**
 
-Jaris. A (soon-to-be) 0 dependency, functional (phoenix) inspired, node / typescript web framework.
+# Features
+
+- 🔒 0 Dependencies
+- 🤓 Functional (encourages function composition, immutable data flow)
+- 🐦 Inspired by [Phoenix](https://github.com/phoenixframework/phoenix) (`conn` pipeline)
 
 # Concepts
 

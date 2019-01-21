@@ -300,4 +300,123 @@ describe('router', () => {
     expect(middlewareFinalResponse).toHaveBeenCalledTimes(0);
     done();
   });
+
+  it('should call the handler with an empty object when no route params', async done => {
+    let connCapture;
+    const handler = jest.fn((conn, params) => {
+      connCapture = conn;
+      return conn;
+    });
+    const routes = [get('/users', handler)];
+    await router(routes)(
+      mockConn({
+        url: '/users',
+        method: 'GET',
+      }),
+    );
+    expect(handler).toHaveBeenCalledTimes(1);
+    expect(handler).toHaveBeenCalledWith(connCapture, {});
+    done();
+  });
+
+  it('should call the handler with a single key in route param object', async done => {
+    let connCapture;
+    const handler = jest.fn((conn, params) => {
+      connCapture = conn;
+      return conn;
+    });
+    const routes = [get('/users/:userId', handler)];
+    await router(routes)(
+      mockConn({
+        url: '/users/123',
+        method: 'GET',
+      }),
+    );
+    expect(handler).toHaveBeenCalledTimes(1);
+    expect(handler).toHaveBeenCalledWith(connCapture, { userId: '123' });
+    done();
+  });
+
+  it('should call the handler with multiple keys in route param object', async done => {
+    let connCapture;
+    const handler = jest.fn((conn, params) => {
+      connCapture = conn;
+      return conn;
+    });
+    const routes = [get('/users/:userId/companies/:companyId', handler)];
+    await router(routes)(
+      mockConn({
+        url: '/users/123/companies/456',
+        method: 'GET',
+      }),
+    );
+    expect(handler).toHaveBeenCalledTimes(1);
+    expect(handler).toHaveBeenCalledWith(connCapture, {
+      userId: '123',
+      companyId: '456',
+    });
+    done();
+  });
+
+  it('should call the handler with route params when trailing slashes in url', async done => {
+    let connCapture;
+    const handler = jest.fn((conn, params) => {
+      connCapture = conn;
+      return conn;
+    });
+    const routes = [get('/users/:userId/', handler)];
+    await router(routes)(
+      mockConn({
+        url: '/users/123',
+        method: 'GET',
+      }),
+    );
+    expect(handler).toHaveBeenCalledTimes(1);
+    expect(handler).toHaveBeenLastCalledWith(connCapture, {
+      userId: '123',
+    });
+
+    await router(routes)(
+      mockConn({
+        url: '/users/123/',
+        method: 'GET',
+      }),
+    );
+    expect(handler).toHaveBeenCalledTimes(2);
+    expect(handler).toHaveBeenLastCalledWith(connCapture, {
+      userId: '123',
+    });
+    done();
+  });
+
+  it('should call the handler with route params when leading slashes in url', async done => {
+    let connCapture;
+    const handler = jest.fn((conn, params) => {
+      connCapture = conn;
+      return conn;
+    });
+    const routes = [get('users/:userId', handler)];
+    await router(routes)(
+      mockConn({
+        url: '/users/123',
+        method: 'GET',
+      }),
+    );
+    expect(handler).toHaveBeenCalledTimes(1);
+    expect(handler).toHaveBeenLastCalledWith(connCapture, {
+      userId: '123',
+    });
+
+    await router(routes)(
+      mockConn({
+        url: 'users/123',
+        method: 'GET',
+      }),
+    );
+    expect(handler).toHaveBeenCalledTimes(2);
+    expect(handler).toHaveBeenLastCalledWith(connCapture, {
+      userId: '123',
+    });
+    done();
+  });
 });
