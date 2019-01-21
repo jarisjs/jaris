@@ -11,10 +11,10 @@ import {
 const applyPrefix = (route: Route, prefix: string = '') => {
   const { path } = route;
 
-  const strippedOriginalPath = trim(path, '/');
+  const strippedOriginalPath = trim('/', path);
   const splitOriginalPath = strippedOriginalPath.split('/');
 
-  const trimmedPrefix = trim(prefix, '/');
+  const trimmedPrefix = trim('/', prefix);
   const splitPrefix = trimmedPrefix.split('/');
 
   const rebuiltPrefix = splitPrefix.join('/');

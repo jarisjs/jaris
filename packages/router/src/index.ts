@@ -1,14 +1,47 @@
 // @ts-ignore
-import { matchPattern, getParams } from 'url-matcher';
+import { getParams } from 'url-matcher';
 import { Conn, text, status } from '@jaris/core';
-import { reduceP, pipe } from '@jaris/util';
+import { reduceP, pipe, trim } from '@jaris/util';
 import { Route } from './types';
 
 export * from './builder';
 export * from './types';
 
+const templateParameterPattern = '(:[a-zA-Z0-9]+)';
+const requestParameterPattern = '([a-zA-Z0-9]+)';
+
+const replaceSlashes = (str: string) =>
+  str.replace(new RegExp(/(\/)+/, 'gm'), '\\/');
+
+const replaceParameters = (str: string) =>
+  str.replace(
+    new RegExp(templateParameterPattern, 'gm'),
+    requestParameterPattern,
+  );
+
+const matchPattern = (url: string, template: string) => {
+  if (template === '/' && url === '/') {
+    return true;
+  }
+
+  if (template === '/' && url !== '/') {
+    return false;
+  }
+
+  const urlBeingRequested = trim('\\/', url);
+  const regexTemplate = pipe(
+    trim('\\/'),
+    replaceParameters,
+    replaceSlashes,
+  )(template);
+
+  console.log(urlBeingRequested, regexTemplate);
+
+  return new RegExp(`^${regexTemplate}$`).test(urlBeingRequested);
+};
+
 export async function runMiddleware(conn: Conn, route: Route) {
-  let finalReturn: any = null;
+  let finalReturn = conn;
 
   if (route.middleware) {
     finalReturn = await reduceP(
@@ -34,14 +67,17 @@ export async function runMiddleware(conn: Conn, route: Route) {
   return finalReturn;
 }
 
+const toLower = (str?: string) => (str ? str.toLowerCase() : str);
+
 const router = (routes: Route[]) => {
   return async (conn: Conn) => {
     const currentPath = conn.req.url;
 
-    const route = routes.find(r => {
-      const match = matchPattern(r.path, currentPath);
-      return match && match.remainingPathname === '';
-    });
+    const route = routes.find(
+      r =>
+        toLower(r.verb) === toLower(conn.req.method) &&
+        matchPattern(currentPath!, r.path),
+    );
 
     if (!route || !route.callback) {
       return pipe(

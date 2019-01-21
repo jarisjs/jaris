@@ -14,6 +14,7 @@ const createAndStoreUser = (userUid: string, body: any) => {
 const userController = {
   index: (conn: Conn) => {
     // ... fetch users
+    console.log('index');
     return json({ users: [] }, conn);
   },
   show: (conn: Conn, { userUid }: UserParams) => {

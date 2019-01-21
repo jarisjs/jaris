@@ -1,5 +1,5 @@
 import server, { Conn } from '@jaris/core';
-import router from '@jaris/router';
+import router from '../../../packages/router/src/index';
 import routes from './routes';
 
 server([
