@@ -35,12 +35,10 @@ const matchPattern = (url: string, template: string) => {
     replaceSlashes,
   )(template);
 
-  console.log(urlBeingRequested, regexTemplate);
-
   return new RegExp(`^${regexTemplate}$`).test(urlBeingRequested);
 };
 
-export async function runMiddleware(conn: Conn, route: Route) {
+const runMiddleware = async (conn: Conn, route: Route) => {
   let finalReturn = conn;
 
   if (route.middleware) {
@@ -65,7 +63,7 @@ export async function runMiddleware(conn: Conn, route: Route) {
   }
 
   return finalReturn;
-}
+};
 
 const toLower = (str?: string) => (str ? str.toLowerCase() : str);
 
