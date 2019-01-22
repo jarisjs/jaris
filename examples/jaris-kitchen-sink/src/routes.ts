@@ -1,5 +1,5 @@
 import { Conn, text } from '@jaris/core';
-import { get, group, post } from '@jaris/router';
+import { get, group, post } from '../../../packages/router/src';
 import userController from '../controllers/user.controller';
 
 const routes = [

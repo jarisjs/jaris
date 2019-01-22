@@ -1,6 +1,10 @@
-import { Conn, json, status } from '@jaris/core';
-import { pipe } from '@jaris/util';
-import validate, { string, required, optional } from '@jaris/validator';
+import { Conn, json, status } from '../../../packages/core';
+import { pipe } from '../../../packages/util/src';
+import validate, {
+  string,
+  required,
+  optional,
+} from '../../../packages/validator/src';
 
 interface UserParams {
   userUid: string;
