@@ -1,11 +1,10 @@
 import { flatten, trim } from '@jaris/util';
 import {
-  HandlerType,
   Route,
   GroupOptions,
   HTTPVerb,
   GroupCallback,
-  RouteHandleFunction,
+  HandlerType,
 } from './types';
 
 const applyPrefix = (route: Route, prefix: string = '') => {
@@ -34,21 +33,11 @@ export const buildRouteObject = (
   path: string,
   handler: HandlerType,
 ): Route => {
-  let response: Route = { path, verb, middleware: [] };
-
-  if (typeof handler === 'string') {
-    const [controllerName, methodName] = handler.split('.');
-
-    return {
-      ...response,
-      controller: controllerName,
-      method: methodName,
-    };
-  }
-
   return {
-    ...response,
-    callback: handler as RouteHandleFunction,
+    path,
+    verb,
+    middleware: [],
+    callback: handler,
   };
 };
 
