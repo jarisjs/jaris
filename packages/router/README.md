@@ -18,11 +18,7 @@ $ npm install -S @jaris/core @jaris/router
 import server, { text } from '@jaris/core';
 import router, { get } from '@jaris/router';
 
-server([
-  router([
-    get('/', conn => text('Hello, world!', conn))
-  ]),
-]);
+server([router([get('/', conn => text('Hello, world!', conn))])]);
 ```
 
 ## Multi file structure
@@ -69,7 +65,7 @@ server([
 
 ## Route Parameters
 
-Route parameters are defined using a colon in the route definition and are passed as object values to the handler.
+Route parameters are defined using a colon in the route definition and are set as object values on `conn.params`.
 
 ```javascript
 import server, { text } from '@jaris/core';
@@ -77,11 +73,9 @@ import router, { get } from '@jaris/router';
 
 server([
   router([
-    get(
-      '/users/:userId', 
-      (conn, { userId }) => 
-        text(`Hello, user ${userId}!`, conn)
-    )
+    get('/users/:userId', conn =>
+      text(`Hello, user ${conn.params.userId}!`, conn),
+    ),
   ]),
 ]);
 ```
@@ -91,15 +85,15 @@ server([
 Prefixes & Middleware
 
 ```javascript
-import server, { json, status, halt } from "@jaris/core";
-import router, { get, post, group } from "@jaris/router";
+import server, { json, status, halt } from '@jaris/core';
+import router, { get, post, group } from '@jaris/router';
 
 // Middleware are the same as @jaris/core
 // so they need to follow the same rule
 // of returning a new connection
 const companyMiddleware = conn => {
-  const token = conn.headers["Authorization"];
-  
+  const token = conn.headers['Authorization'];
+
   // ... parse token
   // fetch user it belongs to
   // check if user has access to company
@@ -113,8 +107,8 @@ const companyMiddleware = conn => {
   // to stop by using the "halt" helper
   return pipe(
     status(403),
-    json({ error: "You do not have permission" }),
-    halt
+    json({ error: 'You do not have permission' }),
+    halt,
   )(conn);
 };
 
@@ -122,26 +116,25 @@ server([
   router([
     // groups need to be spread since
     // they return an array of routes
-    ...group({ prefix: "v1" }, () => [
-      
+    ...group({ prefix: 'v1' }, () => [
       // will evaluate to /v1/users
-      get("/users", userController.index),
-     
-     // leading / trailing slashes are optional
-      post("users", userController.store),
+      get('/users', userController.index),
+
+      // leading / trailing slashes are optional
+      post('users', userController.store),
 
       // groups can be nested
       ...group(
         {
-          prefix: "/companies/:companyId",
-          middleware: [companyMiddleware]
+          prefix: '/companies/:companyId',
+          middleware: [companyMiddleware],
         },
         () => [
           // /v1/companies/:companyUid
-          get("/", companyController.show)
-        ]
-      )
-    ])
-  ])
+          get('/', companyController.show),
+        ],
+      ),
+    ]),
+  ]),
 ]);
 ```

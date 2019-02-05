@@ -1,0 +1,31 @@
+{
+  "name": "@jaris/router-koa",
+  "version": "0.0.5",
+  "private": true,
+  "description": "> TODO: description",
+  "author": "Ozzie Neher <oz.neher@gmail.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {},
+  "dependencies": {
+    "@jaris/core": "^0.0.5",
+    "@jaris/util": "^0.0.5",
+    "@jaris/router": "^0.0.5",
+    "koa": "^2.6.2"
+  },
+  "gitHead": "09a4395923c55d4d5bd55d35cc2aff60872c734f",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.0.48"
+  }
+}

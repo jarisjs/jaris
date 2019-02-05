@@ -1,18 +1,11 @@
 import { Conn } from '@jaris/core';
 
-export type HandlerType = string | RouteHandleFunction | Promise<Conn<any>>;
-
-export type RouteHandleFunction = (
-  conn: Conn,
-  urlParams: { [key: string]: string } | {},
-) => Conn | Promise<Conn>;
-
 export interface Route {
   path: string;
   verb: HTTPVerb;
   controller?: string;
   method?: string;
-  callback?: RouteHandleFunction;
+  callback: MiddlewareFunction;
   middleware: MiddlewareFunction[];
 }
 export type RoutesList = Route[];
@@ -20,6 +13,7 @@ export type RoutesList = Route[];
 export type HTTPVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 export type MiddlewareFunction = (conn: Conn) => Conn | Promise<Conn>;
+export type HandlerType = MiddlewareFunction;
 
 export interface GroupOptions {
   prefix?: string;

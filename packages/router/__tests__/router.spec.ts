@@ -14,11 +14,11 @@ const mockConn = (req = {}, res = {}) =>
 
 describe('buildRouteObject', () => {
   it('should return an object matching the Route interface when given a controller path', () => {
-    expect(buildRouteObject('get', '/users', 'users.index')).toEqual({
+    const cb = (conn: any) => conn;
+    expect(buildRouteObject('get', '/users', cb)).toEqual({
       path: '/users',
       verb: 'get',
-      controller: 'users',
-      method: 'index',
+      callback: cb,
       middleware: [],
     });
   });
@@ -36,11 +36,11 @@ describe('buildRouteObject', () => {
 
 describe('get', function() {
   it('should return a proper Route object when given a controller path', () => {
-    expect(get('/users', 'users.index')).toEqual({
+    const cb = (conn: any) => conn;
+    expect(get('/users', cb)).toEqual({
       path: '/users',
       verb: 'get',
-      controller: 'users',
-      method: 'index',
+      callback: cb,
       middleware: [],
     });
   });
@@ -72,25 +72,25 @@ describe('group', () => {
   });
 
   it('should return the routes defined in initial list and nothing else when no routes are defined inside the callback', () => {
-    const routes = [get('/test', 'test.test')];
+    const routes = [get('/test', conn => conn)];
     const routesWithGroup = [...routes, ...group({}, () => [])];
     expect(routesWithGroup).toEqual(routes);
   });
 
   it('should return a new list containing a single route defined in the callback', () => {
     const routes = [
-      get('/test', 'test.test'),
-      ...group({}, () => [get('/test2', 'test2.test')]),
+      get('/test', conn => conn),
+      ...group({}, () => [get('/test2', conn => conn)]),
     ];
     expect(routes).toHaveLength(2);
   });
 
   it('should return a new list containing a multiple routes defined in the callback', () => {
     const routes = [
-      get('/test', 'test.test'),
+      get('/test', conn => conn),
       ...group({}, () => [
-        get('/test2', 'test2.test'),
-        get('/test3', 'test2.test'),
+        get('/test2', conn => conn),
+        get('/test3', conn => conn),
       ]),
     ];
     expect(routes).toHaveLength(3);
@@ -98,12 +98,12 @@ describe('group', () => {
 
   it('should return a new list containing routes defined in nested group calls', () => {
     const routes = [
-      get('/test', 'test.test'),
+      get('/test', conn => conn),
       ...group({ prefix: '/v1' }, () => [
-        get('/test2', 'test2.test'),
-        get('/test3', 'test2.test'),
+        get('/test2', conn => conn),
+        get('/test3', conn => conn),
 
-        ...group({}, () => [get('/nested/group/routes', 'test3.test')]),
+        ...group({}, () => [get('/nested/group/routes', conn => conn)]),
       ]),
     ];
     expect(routes).toHaveLength(4);
@@ -112,8 +112,8 @@ describe('group', () => {
   it('should modify the path of routes in a group with a prefix', () => {
     const routes = [
       ...group({ prefix: '/v1' }, () => [
-        get('/companies', 'test.test'),
-        get('/companies/123', 'test2.test'),
+        get('/companies', conn => conn),
+        get('/companies/123', conn => conn),
       ]),
     ];
 
@@ -123,12 +123,12 @@ describe('group', () => {
 
   it('should modify the path of routes in a nested group with a prefix', () => {
     const routes = group({ prefix: '/v1' }, () => [
-      get('/companies', 'test.test'),
-      get('/companies/123', 'test2.test'),
+      get('/companies', conn => conn),
+      get('/companies/123', conn => conn),
 
       ...group({ prefix: '/super/' }, () => [
-        get('/forms', 'test3.test'),
-        get('/forms/234/', 'test4.test'),
+        get('/forms', conn => conn),
+        get('/forms/234/', conn => conn),
       ]),
     ]);
 
@@ -140,7 +140,7 @@ describe('group', () => {
     const middlewareOne = (conn: any) => mockConn();
     const routes = [
       ...group({ middleware: [middlewareOne] }, () => [
-        get('/whatever', 'test.test'),
+        get('/whatever', conn => conn),
       ]),
     ];
     expect(routes[0].middleware).toEqual([middlewareOne]);
@@ -157,7 +157,7 @@ describe('router', () => {
   });
 
   it('should return not found when no route matches in list', async done => {
-    const routes = [get('/home', 'x.y'), get('/', 'x.y')];
+    const routes = [get('/home', conn => conn), get('/', conn => conn)];
     const conn = await router(routes)(
       mockConn({
         url: '/asd',
@@ -169,7 +169,7 @@ describe('router', () => {
   });
 
   it('should return not found when a route matches but the method does not', async done => {
-    const routes = [get('/home', 'x.y'), get('/', 'x.y')];
+    const routes = [get('/home', conn => conn), get('/', conn => conn)];
     const conn = await router(routes)(
       mockConn({
         url: '/home',
@@ -182,7 +182,10 @@ describe('router', () => {
   });
 
   it('should return the handler connection when a route is found', async done => {
-    const routes = [get('/home', conn => text('Found', conn)), get('/', 'x.y')];
+    const routes = [
+      get('/home', conn => text('Found', conn)),
+      get('/', conn => conn),
+    ];
     const conn = await router(routes)(
       mockConn({
         url: '/home',
@@ -195,7 +198,10 @@ describe('router', () => {
   });
 
   it('should find the root route', async done => {
-    const routes = [get('/', conn => text('Index', conn)), get('/home', 'x.y')];
+    const routes = [
+      get('/', conn => text('Index', conn)),
+      get('/home', conn => conn),
+    ];
     const conn = await router(routes)(
       mockConn({
         url: '/',
@@ -315,7 +321,8 @@ describe('router', () => {
       }),
     );
     expect(handler).toHaveBeenCalledTimes(1);
-    expect(handler).toHaveBeenCalledWith(connCapture, {});
+    expect(handler).toHaveBeenCalledWith(connCapture);
+    expect(connCapture).toHaveProperty('params', {});
     done();
   });
 
@@ -333,7 +340,10 @@ describe('router', () => {
       }),
     );
     expect(handler).toHaveBeenCalledTimes(1);
-    expect(handler).toHaveBeenCalledWith(connCapture, { userId: '123' });
+    expect(handler).toHaveBeenCalledWith(connCapture);
+    expect(connCapture).toHaveProperty('params', {
+      userId: '123',
+    });
     done();
   });
 
@@ -351,7 +361,8 @@ describe('router', () => {
       }),
     );
     expect(handler).toHaveBeenCalledTimes(1);
-    expect(handler).toHaveBeenCalledWith(connCapture, {
+    expect(handler).toHaveBeenCalledWith(connCapture);
+    expect(connCapture).toHaveProperty('params', {
       userId: '123',
       companyId: '456',
     });
@@ -372,9 +383,8 @@ describe('router', () => {
       }),
     );
     expect(handler).toHaveBeenCalledTimes(1);
-    expect(handler).toHaveBeenLastCalledWith(connCapture, {
-      userId: '123',
-    });
+    expect(handler).toHaveBeenLastCalledWith(connCapture);
+    expect(connCapture).toHaveProperty('params', { userId: '123' });
 
     await router(routes)(
       mockConn({
@@ -383,9 +393,8 @@ describe('router', () => {
       }),
     );
     expect(handler).toHaveBeenCalledTimes(2);
-    expect(handler).toHaveBeenLastCalledWith(connCapture, {
-      userId: '123',
-    });
+    expect(handler).toHaveBeenLastCalledWith(connCapture);
+    expect(connCapture).toHaveProperty('params', { userId: '123' });
     done();
   });
 
@@ -403,9 +412,8 @@ describe('router', () => {
       }),
     );
     expect(handler).toHaveBeenCalledTimes(1);
-    expect(handler).toHaveBeenLastCalledWith(connCapture, {
-      userId: '123',
-    });
+    expect(handler).toHaveBeenLastCalledWith(connCapture);
+    expect(connCapture).toHaveProperty('params', { userId: '123' });
 
     await router(routes)(
       mockConn({
@@ -414,9 +422,8 @@ describe('router', () => {
       }),
     );
     expect(handler).toHaveBeenCalledTimes(2);
-    expect(handler).toHaveBeenLastCalledWith(connCapture, {
-      userId: '123',
-    });
+    expect(handler).toHaveBeenLastCalledWith(connCapture);
+    expect(connCapture).toHaveProperty('params', { userId: '123' });
     done();
   });
 });
