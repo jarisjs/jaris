@@ -1,6 +1,7 @@
 import { reduceP, pipe, trim } from '@jaris/util';
 import { Route } from './types';
 import { IncomingMessage, ServerResponse } from 'http';
+import { Conn } from '@jaris/core';
 
 const toLower = (str?: string) => (str ? str.toLowerCase() : str);
 
@@ -69,16 +70,20 @@ const matchPattern = (url: string, template: string) => {
   return new RegExp(`^${regexTemplate}$`).test(urlBeingRequested);
 };
 
-const runMiddleware = async <T>(route: Route, handler: Router<T>, conn: T) => {
+const runMiddleware = async (
+  route: Route,
+  handler: Router<Conn>,
+  conn: Conn,
+) => {
   let finalReturn = conn;
 
   if (route.middleware) {
     finalReturn = await reduceP(
       async (carry, middlewareFunc) => {
-        if (handler.exitCheck(conn)) {
+        if (handler.exitCheck(carry)) {
           return carry;
         }
-        return await middlewareFunc(conn);
+        return await middlewareFunc(carry);
       },
       conn,
       route.middleware,
@@ -89,11 +94,11 @@ const runMiddleware = async <T>(route: Route, handler: Router<T>, conn: T) => {
    * No middleware or they did not halt early
    * so lets run the controller handler
    */
-  if (!handler.exitCheck(conn)) {
-    return await route.callback!(conn);
+  if (handler.exitCheck(finalReturn)) {
+    return finalReturn;
   }
 
-  return finalReturn;
+  return await route.callback!(finalReturn);
 };
 
 export interface Router<T> {
@@ -103,9 +108,9 @@ export interface Router<T> {
   exitCheck: (conn: T) => boolean;
 }
 
-export const baseRouter = <T>(handler: Router<T>) => {
+export const baseRouter = (handler: Router<Conn>) => {
   return (routes: Route[]) => {
-    return async (conn: T) => {
+    return async (conn: Conn) => {
       const currentPath = handler.req(conn).url;
 
       const route = routes.find(
@@ -118,7 +123,10 @@ export const baseRouter = <T>(handler: Router<T>) => {
         return handler.notFound(conn);
       }
 
-      return await runMiddleware(route, handler, conn);
+      return await runMiddleware(route, handler, {
+        ...conn,
+        params: getParams(currentPath!, route.path),
+      });
     };
   };
 };

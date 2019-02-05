@@ -1,3 +1,5 @@
+import { Conn } from '@jaris/core';
+
 export interface Route {
   path: string;
   verb: HTTPVerb;
@@ -10,7 +12,7 @@ export type RoutesList = Route[];
 
 export type HTTPVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
-export type MiddlewareFunction = <T>(conn: T) => T | Promise<T>;
+export type MiddlewareFunction = (conn: Conn) => Conn | Promise<Conn>;
 export type HandlerType = MiddlewareFunction;
 
 export interface GroupOptions {

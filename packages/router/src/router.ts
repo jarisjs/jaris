@@ -1,8 +1,8 @@
-import { Conn, text, status } from '@jaris/core';
+import { text, status } from '@jaris/core';
 import { pipe } from '@jaris/util';
 import { baseRouter } from './base';
 
-const router = baseRouter<Conn>({
+const router = baseRouter({
   req: conn => conn.req,
   res: conn => conn.res,
   notFound: conn =>

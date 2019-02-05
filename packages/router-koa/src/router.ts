@@ -1,6 +1,13 @@
 import { baseRouter } from '@jaris/router';
 import { Context } from 'koa';
 
+declare module 'koa' {
+  interface Context {
+    params?: any;
+    halt?: boolean;
+  }
+}
+
 const router = baseRouter<Context>({
   req: ctx => ctx.req,
   res: ctx => ctx.res,
@@ -9,7 +16,7 @@ const router = baseRouter<Context>({
     ctx.status = 404;
     return ctx;
   },
-  exitCheck: ctx => !ctx.body,
+  exitCheck: ctx => !ctx.halt,
 });
 
 export default router;

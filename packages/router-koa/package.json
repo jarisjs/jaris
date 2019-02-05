@@ -1,6 +1,7 @@
 {
   "name": "@jaris/router-koa",
   "version": "0.0.5",
+  "private": true,
   "description": "> TODO: description",
   "author": "Ozzie Neher <oz.neher@gmail.com>",
   "homepage": "",
@@ -13,9 +14,7 @@
   "files": [
     "lib"
   ],
-  "scripts": {
-    "tsc": "tsc"
-  },
+  "scripts": {},
   "dependencies": {
     "@jaris/core": "^0.0.5",
     "@jaris/util": "^0.0.5",

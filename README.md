@@ -19,7 +19,9 @@ A simple hello world would look like:
 ```javascript
 import server, { text } from '@jaris/core';
 
-server([conn => text('Hello, world!', conn)]);
+server([
+  conn => text('Hello, world!', conn)
+]);
 ```
 
 Documentation is still a WIP but you can read more by clicking into the packages and reading their `README` files.
