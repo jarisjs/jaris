@@ -1,6 +1,6 @@
 {
   "name": "@jaris/router",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "> TODO: description",
   "author": "Ozzie Neher <oz.neher@gmail.com>",
   "homepage": "",
@@ -17,8 +17,8 @@
     "tsc": "tsc"
   },
   "dependencies": {
-    "@jaris/core": "^0.0.5",
-    "@jaris/util": "^0.0.5"
+    "@jaris/core": "^0.0.6",
+    "@jaris/util": "^0.0.6"
   },
   "gitHead": "09a4395923c55d4d5bd55d35cc2aff60872c734f",
   "publishConfig": {
