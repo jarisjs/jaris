@@ -229,6 +229,57 @@ describe('router', () => {
     done();
   });
 
+  it('should parse multiple querystring params', async done => {
+    const routes = [
+      get('/', conn => text('Index', conn)),
+      get('/users/:userUid', conn => text('User', conn)),
+    ];
+    const conn = await router(routes)(
+      mockConn({
+        url: '/users/1234?token=xabsc&other=1234',
+        method: 'GET',
+      }),
+    );
+    expect(conn.body).toEqual('User');
+    expect(conn.status).toEqual(200);
+    expect(conn.query).toEqual({ token: 'xabsc', other: '1234' });
+    done();
+  });
+
+  it('shouldnt break when empty qs', async done => {
+    const routes = [
+      get('/', conn => text('Index', conn)),
+      get('/users/:userUid', conn => text('User', conn)),
+    ];
+    const conn = await router(routes)(
+      mockConn({
+        url: '/users/1234?token=',
+        method: 'GET',
+      }),
+    );
+    expect(conn.body).toEqual('User');
+    expect(conn.status).toEqual(200);
+    expect(conn.query).toEqual({ token: '' });
+    done();
+  });
+
+  it('shouldnt break when just a question mark', async done => {
+    const routes = [
+      get('/', conn => text('Index', conn)),
+      get('/users/:userUid', conn => text('User', conn)),
+    ];
+    const conn = await router(routes)(
+      mockConn({
+        url: '/users/1234?',
+        method: 'GET',
+      }),
+    );
+    expect(conn.body).toEqual('User');
+    expect(conn.status).toEqual(200);
+    expect(conn.query).toEqual({});
+    done();
+  });
+
   it('should find a route with a single route parameter', async done => {
     const routes = [
       get('/', conn => text('Index', conn)),

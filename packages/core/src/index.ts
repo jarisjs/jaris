@@ -15,6 +15,7 @@ export function createConn(
     body: {},
     headers: {},
     halt: false,
+    query: {},
     req,
     res,
   };

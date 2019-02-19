@@ -15,6 +15,9 @@ export interface Conn<T = any> {
   res: http.ServerResponse;
   status: number;
   body: ResponseBody;
+  query: {
+    [key: string]: any;
+  };
   headers: {
     [key: string]: string;
   };

@@ -2,6 +2,7 @@ import { reduceP, pipe, trim } from '@jaris/util';
 import { Route } from './types';
 import { IncomingMessage, ServerResponse } from 'http';
 import { Conn } from '@jaris/core';
+import * as querystring from 'querystring';
 
 const toLower = (str?: string) => (str ? str.toLowerCase() : str);
 
@@ -117,7 +118,7 @@ export const baseRouter = (handler: Router<Conn>) => {
         return handler.notFound(conn);
       }
 
-      const pathWithoutQuery = currentPath.split('?')[0];
+      const [pathWithoutQuery, queryString] = currentPath.split('?');
 
       const route = routes.find(
         r =>
@@ -132,6 +133,7 @@ export const baseRouter = (handler: Router<Conn>) => {
       return await runMiddleware(route, handler, {
         ...conn,
         params: getParams(currentPath!, route.path),
+        query: queryString ? querystring.parse(queryString) : {},
       });
     };
   };
