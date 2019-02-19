@@ -213,6 +213,22 @@ describe('router', () => {
     done();
   });
 
+  it('should find a route when a query string is provided', async done => {
+    const routes = [
+      get('/', conn => text('Index', conn)),
+      get('/users/:userUid', conn => text('User', conn)),
+    ];
+    const conn = await router(routes)(
+      mockConn({
+        url: '/users/1234?token=xabsc',
+        method: 'GET',
+      }),
+    );
+    expect(conn.body).toEqual('User');
+    expect(conn.status).toEqual(200);
+    done();
+  });
+
   it('should find a route with a single route parameter', async done => {
     const routes = [
       get('/', conn => text('Index', conn)),

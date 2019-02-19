@@ -113,10 +113,16 @@ export const baseRouter = (handler: Router<Conn>) => {
     return async (conn: Conn) => {
       const currentPath = handler.req(conn).url;
 
+      if (!currentPath) {
+        return handler.notFound(conn);
+      }
+
+      const pathWithoutQuery = currentPath.split('?')[0];
+
       const route = routes.find(
         r =>
           toLower(r.verb) === toLower(handler.req(conn).method) &&
-          matchPattern(currentPath!, r.path),
+          matchPattern(pathWithoutQuery, r.path),
       );
 
       if (!route || !route.callback) {
