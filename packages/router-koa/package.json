@@ -1,6 +1,6 @@
 {
   "name": "@jaris/router-koa",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "description": "> TODO: description",
   "author": "Ozzie Neher <oz.neher@gmail.com>",
@@ -16,9 +16,9 @@
   ],
   "scripts": {},
   "dependencies": {
-    "@jaris/core": "^0.0.6",
-    "@jaris/router": "^0.0.6",
-    "@jaris/util": "^0.0.6",
+    "@jaris/core": "^0.0.7",
+    "@jaris/router": "^0.0.7",
+    "@jaris/util": "^0.0.7",
     "koa": "^2.6.2"
   },
   "gitHead": "09a4395923c55d4d5bd55d35cc2aff60872c734f",

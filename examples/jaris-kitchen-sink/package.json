@@ -1,6 +1,6 @@
 {
   "name": "jaris-kitchen-sink",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,9 +11,9 @@
   "license": "ISC",
   "private": true,
   "dependencies": {
-    "@jaris/core": "^0.0.6",
-    "@jaris/router": "^0.0.6",
-    "@jaris/util": "^0.0.6",
-    "@jaris/validator": "^0.0.6"
+    "@jaris/core": "^0.0.7",
+    "@jaris/router": "^0.0.7",
+    "@jaris/util": "^0.0.7",
+    "@jaris/validator": "^0.0.7"
   }
 }
