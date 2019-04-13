@@ -22,4 +22,5 @@ export interface Conn<T = any> {
     [key: string]: string;
   };
   halt: boolean;
+  request: any;
 }

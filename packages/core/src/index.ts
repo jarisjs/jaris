@@ -1,14 +1,16 @@
 import * as http from 'http';
 import { Conn } from './types';
 import { reduceP } from '@jaris/util';
+import responseParser from './parsers/response';
+import requestParser from './parsers/request';
 
 export * from './responses';
 export * from './types';
 
-export function createConn(
+export async function createConn(
   req: http.IncomingMessage,
   res: http.ServerResponse,
-): Conn {
+): Promise<Conn> {
   return {
     status: 200,
     params: {},
@@ -16,6 +18,7 @@ export function createConn(
     headers: {},
     halt: false,
     query: {},
+    request: await requestParser(req),
     req,
     res,
   };
@@ -36,7 +39,7 @@ export default function server(
 
       const { status, body, headers } = await reduceP(
         async (conn, fn) => (conn.halt ? conn : await fn(await conn)),
-        createConn(req, res),
+        await createConn(req, res),
         composedApp,
       );
 
@@ -44,13 +47,15 @@ export default function server(
         res.setHeader(key, headers[key]);
       });
 
-      const responseBody = JSON.stringify(body);
+      const responseBody = responseParser(headers['Content-Type'], body);
 
-      res.writeHead(status, {
-        'Content-Length': Buffer.from(responseBody).length,
-      });
+      if (Buffer.isBuffer(responseBody)) {
+        res.writeHead(status, {
+          'Content-Length': responseBody.length,
+        });
+      }
 
-      return res.end(Buffer.from(responseBody));
+      return res.end(responseBody);
     },
   );
   return server.listen(port);
