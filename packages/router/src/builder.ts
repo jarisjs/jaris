@@ -1,5 +1,11 @@
 import { flatten, trim } from '@jaris/util';
-import { Route, GroupOptions, HTTPVerb, HandlerType } from './types';
+import {
+  Route,
+  GroupOptions,
+  HTTPVerb,
+  HandlerType,
+  GroupCallback,
+} from './types';
 
 const applyPrefix = (route: Route, prefix: string = '') => {
   const { path } = route;
@@ -57,9 +63,10 @@ export const destroy = (path: string, handler: HandlerType) => {
 
 export const group = (
   options: GroupOptions,
-  routes: Array<Route | Route[]>,
+  routes: Array<Route | Route[]> | GroupCallback,
 ) => {
-  const updatedRoutes = routes.map(
+  const resolvedRoutes = Array.isArray(routes) ? routes : routes();
+  const updatedRoutes = resolvedRoutes.map(
     (routeObj): Route | Route[] => {
       // handle nested group
 
