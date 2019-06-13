@@ -2,7 +2,8 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "bootstrap": "lerna bootstrap --hoist"
   },
   "devDependencies": {
     "@types/jest": "^23.3.10",
