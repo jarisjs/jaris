@@ -1,4 +1,4 @@
-import { flatten } from '../lib';
+import { flatten } from '../src';
 
 describe('util', () => {
   describe('flatten', () => {
