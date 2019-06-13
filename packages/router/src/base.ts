@@ -1,4 +1,4 @@
-import { reduceP, pipe, trim } from '@jaris/util';
+import { reduceP, pipe, trim, flatten } from '@jaris/util';
 import { Route } from './types';
 import { IncomingMessage, ServerResponse } from 'http';
 import { Conn } from '@jaris/core';
@@ -110,7 +110,8 @@ export interface Router<T> {
 }
 
 export const baseRouter = (handler: Router<Conn>) => {
-  return (routes: Route[]) => {
+  return (routes: Array<Route | Route[]>) => {
+    const routesFlattened = flatten(routes) as Route[];
     return async (conn: Conn) => {
       const currentPath = handler.req(conn).url;
 
@@ -120,7 +121,7 @@ export const baseRouter = (handler: Router<Conn>) => {
 
       const [pathWithoutQuery, queryString] = currentPath.split('?');
 
-      const route = routes.find(
+      const route = routesFlattened.find(
         r =>
           toLower(r.verb) === toLower(handler.req(conn).method) &&
           matchPattern(pathWithoutQuery, r.path),

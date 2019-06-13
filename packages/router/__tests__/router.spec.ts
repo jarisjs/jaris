@@ -4,6 +4,7 @@ import {
   group,
   initializeRoutes,
   post,
+  base,
 } from '../src/builder';
 import { createConn, text, halt } from '@jaris/core';
 import { IncomingMessage, ServerResponse } from 'http';
@@ -63,70 +64,67 @@ describe('initializeRoutes', () => {
 });
 
 describe('group', () => {
-  it('should return no routes when given an empty list and no routes are defined inside the callback', () => {
+  it('should return no routes when given an empty list and no routes are defined inside the array', () => {
     let routes = initializeRoutes();
 
-    routes = group({}, () => []);
+    routes = group({}, []);
 
     expect(routes).toHaveLength(0);
   });
 
-  it('should return the routes defined in initial list and nothing else when no routes are defined inside the callback', () => {
-    const routes = [get('/test', conn => conn)];
-    const routesWithGroup = [...routes, ...group({}, () => [])];
+  it('should return the routes defined in initial list and nothing else when no routes are defined inside the array', () => {
+    const routes = base([get('/test', conn => conn)]);
+    const routesWithGroup = base([...routes, group({}, [])]);
     expect(routesWithGroup).toEqual(routes);
   });
 
-  it('should return a new list containing a single route defined in the callback', () => {
-    const routes = [
+  it('should return a new list containing a single route defined in the array', () => {
+    const routes = base([
       get('/test', conn => conn),
-      ...group({}, () => [get('/test2', conn => conn)]),
-    ];
+      group({}, [get('/test2', conn => conn)]),
+    ]);
     expect(routes).toHaveLength(2);
   });
 
-  it('should return a new list containing a multiple routes defined in the callback', () => {
-    const routes = [
+  it('should return a new list containing a multiple routes defined in the array', () => {
+    const routes = base([
       get('/test', conn => conn),
-      ...group({}, () => [
-        get('/test2', conn => conn),
-        get('/test3', conn => conn),
-      ]),
-    ];
+      group({}, [get('/test2', conn => conn), get('/test3', conn => conn)]),
+    ]);
     expect(routes).toHaveLength(3);
   });
 
   it('should return a new list containing routes defined in nested group calls', () => {
-    const routes = [
+    const routes = base([
       get('/test', conn => conn),
-      ...group({ prefix: '/v1' }, () => [
+      group({ prefix: '/v1' }, [
         get('/test2', conn => conn),
         get('/test3', conn => conn),
 
-        ...group({}, () => [get('/nested/group/routes', conn => conn)]),
+        group({}, [get('/nested/group/routes', conn => conn)]),
       ]),
-    ];
+    ]);
     expect(routes).toHaveLength(4);
   });
 
   it('should modify the path of routes in a group with a prefix', () => {
-    const routes = [
-      ...group({ prefix: '/v1' }, () => [
+    const routes = base([
+      group({ prefix: '/v1' }, [
         get('/companies', conn => conn),
         get('/companies/123', conn => conn),
       ]),
-    ];
+    ]);
 
     expect(routes[0].path).toBe('/v1/companies');
     expect(routes[1].path).toBe('/v1/companies/123');
   });
 
   it('should modify the path of routes in a nested group with a prefix', () => {
-    const routes = group({ prefix: '/v1' }, () => [
+    const routes = group({ prefix: '/v1' }, [
       get('/companies', conn => conn),
       get('/companies/123', conn => conn),
 
-      ...group({ prefix: '/super/' }, () => [
+      group({ prefix: '/super/' }, [
         get('/forms', conn => conn),
         get('/forms/234/', conn => conn),
       ]),
@@ -138,11 +136,9 @@ describe('group', () => {
 
   it('should apply a single middleware', () => {
     const middlewareOne = (conn: any) => mockConn();
-    const routes = [
-      ...group({ middleware: [middlewareOne] }, () => [
-        get('/whatever', conn => conn),
-      ]),
-    ];
+    const routes = base([
+      group({ middleware: [middlewareOne] }, [get('/whatever', conn => conn)]),
+    ]);
     expect(routes[0].middleware).toEqual([middlewareOne]);
   });
 });
@@ -337,9 +333,9 @@ describe('router', () => {
     const middlewareTwo = jest.fn(conn => conn);
     const middlewareFinalResponse = jest.fn(conn => conn);
     const middleware = [middlewareOne, middlewareTwo];
-    const routes = [
-      ...group({ middleware }, () => [get('/home', middlewareFinalResponse)]),
-    ];
+    const routes = base([
+      group({ middleware }, [get('/home', middlewareFinalResponse)]),
+    ]);
     await router(routes)(
       mockConn({
         url: '/home',
@@ -358,9 +354,9 @@ describe('router', () => {
     const middlewareThree = jest.fn(conn => conn);
     const middlewareFinalResponse = jest.fn(conn => conn);
     const middleware = [middlewareOne, middlewareTwo, middlewareThree];
-    const routes = [
-      ...group({ middleware }, () => [get('/home', middlewareFinalResponse)]),
-    ];
+    const routes = base([
+      group({ middleware }, [get('/home', middlewareFinalResponse)]),
+    ]);
     await router(routes)(
       mockConn({
         url: '/home',

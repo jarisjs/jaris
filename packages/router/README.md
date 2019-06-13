@@ -18,7 +18,11 @@ $ npm install -S @jaris/core @jaris/router
 import server, { text } from '@jaris/core';
 import router, { get } from '@jaris/router';
 
-server([router([get('/', conn => text('Hello, world!', conn))])]);
+server([
+  router([
+    get('/', conn => text('Hello, world!', conn))
+  ])
+]);
 ```
 
 ## Multi file structure
@@ -43,7 +47,9 @@ export default userController;
 import { get } from '@jaris/router';
 import userController from './user.controller';
 
-const apiRoutes = [get('/users', userController.index)];
+const apiRoutes = [
+  get('/users', userController.index)
+];
 
 export default apiRoutes;
 ```
@@ -55,7 +61,7 @@ import router from '@jaris/router';
 import apiRoutes from './api.routes.ts';
 
 server([
-  (conn) => {
+  conn => {
     console.log('Since the router is also just a middleware itself, we can have as many middleware before or after that we want!');
     return conn;
   }
@@ -92,7 +98,7 @@ import router, { get, post, group } from '@jaris/router';
 // so they need to follow the same rule
 // of returning a new connection
 const companyMiddleware = conn => {
-  const token = conn.headers['Authorization'];
+  const token = conn.headers.Authorization;
 
   // ... parse token
   // fetch user it belongs to
@@ -114,9 +120,7 @@ const companyMiddleware = conn => {
 
 server([
   router([
-    // groups need to be spread since
-    // they return an array of routes
-    ...group({ prefix: 'v1' }, () => [
+    group({ prefix: 'v1' }, [
       // will evaluate to /v1/users
       get('/users', userController.index),
 
@@ -124,13 +128,13 @@ server([
       post('users', userController.store),
 
       // groups can be nested
-      ...group(
+      group(
         {
           prefix: '/companies/:companyId',
           middleware: [companyMiddleware],
         },
-        () => [
-          // /v1/companies/:companyUid
+        [
+          // /v1/companies/:companyId
           get('/', companyController.show),
         ],
       ),

@@ -3,8 +3,8 @@ import {
   Route,
   GroupOptions,
   HTTPVerb,
-  GroupCallback,
   HandlerType,
+  GroupCallback,
 } from './types';
 
 const applyPrefix = (route: Route, prefix: string = '') => {
@@ -61,13 +61,17 @@ export const destroy = (path: string, handler: HandlerType) => {
   return buildRouteObject('delete', path, handler);
 };
 
-export const group = (options: GroupOptions, callback: GroupCallback) => {
-  const updatedRoutes = callback().map(
+export const group = (
+  options: GroupOptions,
+  routes: Array<Route | Route[]> | GroupCallback,
+) => {
+  const resolvedRoutes = Array.isArray(routes) ? routes : routes();
+  const updatedRoutes = resolvedRoutes.map(
     (routeObj): Route | Route[] => {
       // handle nested group
 
       if (Array.isArray(routeObj)) {
-        return group(options, () => routeObj);
+        return group(options, routeObj);
       }
 
       let updatedRoute = { ...routeObj };
@@ -87,5 +91,9 @@ export const group = (options: GroupOptions, callback: GroupCallback) => {
     },
   );
 
-  return [...flatten(updatedRoutes)] as Route[];
+  return flatten(updatedRoutes) as Route[];
+};
+
+export const base = (routes: Array<Route | Route[]>): Route[] => {
+  return flatten(routes) as Route[];
 };

@@ -13,11 +13,11 @@ export const reduceP = async <T, S>(
   return cur;
 };
 
-export const flatten = <T>(arr: T[]) => {
+export const flatten = <T>(arr: T[]): T[] => {
   return arr.reduce(
     (carry, nextArr) => [
       ...carry,
-      ...(Array.isArray(nextArr) ? nextArr : [nextArr]),
+      ...(Array.isArray(nextArr) ? flatten(nextArr) : [nextArr]),
     ],
     [],
   );
