@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "test": "jest",
-    "bootstrap": "lerna bootsrap --hoist && lerna exec npm install"
+    "bootstrap": "lerna bootstrap --hoist && lerna exec npm install"
   },
   "devDependencies": {
     "@types/jest": "^23.3.10",
