@@ -2,7 +2,8 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "bootstrap": "lerna exec npm install"
   },
   "devDependencies": {
     "@types/jest": "^23.3.10",
