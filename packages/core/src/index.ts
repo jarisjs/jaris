@@ -23,35 +23,40 @@ export function createConn(
 
 type JarisMiddleware = (conn: Conn) => Conn | Promise<Conn>;
 
+export const createCallback = (composedApp: JarisMiddleware[]) => async (
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+) => {
+  if (req.url === '/favicon.ico') {
+    res.writeHead(200);
+    return res.end();
+  }
+
+  const { status, body, headers } = await reduceP(
+    async (conn, fn) => (conn.halt ? conn : await fn(await conn)),
+    createConn(req, res),
+    composedApp,
+  );
+
+  Object.keys(headers).forEach(key => {
+    res.setHeader(key, headers[key]);
+  });
+
+  const responseBody = JSON.stringify(body);
+
+  res.writeHead(status, {
+    'Content-Length': Buffer.from(responseBody).length,
+  });
+
+  return res.end(Buffer.from(responseBody));
+};
+
+export const lambda = createCallback;
+
 export default function server(
   composedApp: JarisMiddleware[],
   port: number = 3001,
 ) {
-  const server = http.createServer(
-    async (req: http.IncomingMessage, res: http.ServerResponse) => {
-      if (req.url === '/favicon.ico') {
-        res.writeHead(200);
-        return res.end();
-      }
-
-      const { status, body, headers } = await reduceP(
-        async (conn, fn) => (conn.halt ? conn : await fn(await conn)),
-        createConn(req, res),
-        composedApp,
-      );
-
-      Object.keys(headers).forEach(key => {
-        res.setHeader(key, headers[key]);
-      });
-
-      const responseBody = JSON.stringify(body);
-
-      res.writeHead(status, {
-        'Content-Length': Buffer.from(responseBody).length,
-      });
-
-      return res.end(Buffer.from(responseBody));
-    },
-  );
+  const server = http.createServer(createCallback(composedApp));
   return server.listen(port);
 }
