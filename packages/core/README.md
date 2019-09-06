@@ -4,13 +4,13 @@
 
 Jaris. A 0 dependency, functional (phoenix) inspired, node / typescript web framework.
 
-# Installation
+## Installation
 
 ```
 $ npm install -S @jaris/core
 ```
 
-# Usage
+## Usage
 
 The core concept behind `jaris` is that the `conn` object gets passed through a series of functions (middleware), and the final resulting `conn` determines what is sent.
 
@@ -101,5 +101,17 @@ server([
       header('X-Total-Time', `${endTime - startTime} seconds`)
     )(conn);
   }
+]);
+```
+
+## Cloud Functions (Serverless)
+
+Jaris can also be used in a "serverless" environment (AWS Lambda, zeit, Google Cloud Functions) using the exported `lambda` function.
+
+```javascript
+const { lambda, json } = require('@jaris/core');
+
+module.exports = lambda([
+  conn => json({ ok: true })(conn),
 ]);
 ```
